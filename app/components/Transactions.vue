@@ -1,3 +1,26 @@
+<script lang="ts" setup>
+import { WalletCardsIcon, ShoppingCart, Edit3, Trash2, EditIcon } from 'lucide-vue-next'
+
+// Props: transactions (array)
+const props = defineProps<{ transactions: any[] }>()
+
+// Emits for parent component
+const emit = defineEmits<{
+  edit: [transaction: any]
+  delete: [transactionId: string]
+}>()
+
+const handleEdit = (transaction: any) => {
+  emit('edit', transaction)
+}
+
+const handleDelete = (transactionId: string) => {
+  if (confirm('Are you sure you want to delete this transaction?')) {
+    emit('delete', transactionId)
+  }
+}
+</script>
+
 <template>
   <div class="space-y-4">
     <div
@@ -23,16 +46,30 @@
           <span class="text-gray-400 mx-3">{{ new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</span>
         </div>
       </div>
-      <div :class="t.type === 'income' ? 'text-green-600' : 'text-red-600'" class="font-bold">
-        {{ t.type === 'income' ? '+' : '-' }}
-        ${{ t.amount }}
+      <div class="flex items-center gap-3">
+        <div :class="t.type === 'income' ? 'text-green-600' : 'text-red-600'" class="font-bold">
+          {{ t.type === 'income' ? '+' : '-' }}
+          ${{ t.amount }}
+        </div>
+        <div class="flex gap-2">
+          <button
+            @click="handleEdit(t)"
+            class="p-1 text-blue-600 hover:bg-blue-100 rounded transition-colors"
+            title="Edit transaction"
+          >
+            <EditIcon class="w-4 h-4" />
+          </button>
+          <button
+            @click="handleDelete(t.id)"
+            class="p-1 text-red-600 hover:bg-red-100 rounded transition-colors"
+            title="Delete transaction"
+          >
+            <Trash2 class="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { WalletCardsIcon, ShoppingCart } from 'lucide-vue-next'
-// Props: transactions (array)
-defineProps<{ transactions: any[] }>()
-</script>
+
