@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ShoppingCart, WalletCards } from 'lucide-vue-next';
+import { formatCurrency } from '~/utils/utils';
 
 defineProps<{
   balance: number
@@ -7,9 +8,6 @@ defineProps<{
   expense: number
 }>();
 
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-};
 </script>
 
 <template>

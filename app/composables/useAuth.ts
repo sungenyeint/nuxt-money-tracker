@@ -3,12 +3,14 @@ import { auth, googleProvider } from "~/composables/useFirebase"
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth"
 
 const user = ref<any>(null)
+const authLoading = ref(true)
 let initialized = false
 
 function initAuthListener() {
   if (!initialized) {
     onAuthStateChanged(auth, (u) => {
       user.value = u
+      authLoading.value = false
     })
     initialized = true
   }
@@ -52,5 +54,5 @@ export function useAuth() {
     }
   }
 
-  return { user, signout, signin, signUpWithEmail, signInWithGoogle }
+  return { user, authLoading, signout, signin, signUpWithEmail, signInWithGoogle }
 }
