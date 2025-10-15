@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatCurrency } from '~/utils/utils'
+import { formatCurrency } from '~/utils/formatter'
 const props = defineProps<{
   categories: [string, number][],
   currency: string

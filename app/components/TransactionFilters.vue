@@ -74,7 +74,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
         "
         type="text"
         placeholder="Search by description, category, or amount..."
-        class="border rounded-lg px-4 py-2 flex-1 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+        class="border rounded-lg px-4 py-2 flex-1 focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-200 dark:text-black dark:bg-gray-200"
       />
       <button
         @click="toggleFilters"
@@ -100,10 +100,10 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
     <!-- Filter Panel -->
     <div
       v-if="showFilters"
-      class="bg-white border rounded-lg p-4 shadow-sm space-y-4"
+      class="bg-white dark:bg-gray-600 border rounded-lg p-4 shadow-sm space-y-4"
     >
       <div class="flex items-center justify-between mb-2">
-        <h3 class="font-semibold text-gray-800">Filter Transactions</h3>
+        <h3 class="font-semibold text-gray-800 dark:text-white">Filter Transactions</h3>
         <button
           v-if="hasActiveFilters"
           @click="clearAllFilters"
@@ -117,7 +117,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Type Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             Type
           </label>
           <select
@@ -128,7 +128,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
                 ($event.target as HTMLSelectElement).value
               )
             "
-            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-200 dark:text-black"
           >
             <option value="all">All Types</option>
             <option value="income">Income</option>
@@ -138,7 +138,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
 
         <!-- Category Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             Category
           </label>
           <select
@@ -149,7 +149,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
                 ($event.target as HTMLSelectElement).value
               )
             "
-            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-200 dark:text-black"
           >
             <option value="all">All Categories</option>
             <option
@@ -164,7 +164,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
 
         <!-- Date From -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             From Date
           </label>
           <input
@@ -176,13 +176,13 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
               )
             "
             type="date"
-            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-200 dark:text-black"
           />
         </div>
 
         <!-- Date To -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             To Date
           </label>
           <input
@@ -191,7 +191,7 @@ const clearFilter = (key: keyof FilterState, defaultValue: any = "all") => {
               updateFilter('dateTo', ($event.target as HTMLInputElement).value)
             "
             type="date"
-            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-200 dark:text-black"
           />
         </div>
       </div>

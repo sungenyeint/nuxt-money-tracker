@@ -23,7 +23,7 @@ const onAdd = () => {
     v-if="show"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
   >
-    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md relative">
+    <div class="bg-white dark:bg-gray-600 rounded-xl shadow-lg p-6 w-full max-w-md relative">
       <button
         @click="$emit('close')"
         class="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
@@ -37,7 +37,7 @@ const onAdd = () => {
           <input
             v-model="category.name"
             placeholder="Enter category name"
-            class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300"
+            class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-300 dark:bg-gray-400"
           />
         </div>
         <div>

@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { formatCurrency } from "~/utils/utils";
+import { formatCurrency } from "~/utils/formatter";
 defineProps<{
   topCategories: any[];
   filteredExpense: number;
+  currency: string;
 }>();
 </script>
 
 <template>
   <div
     v-if="topCategories.length > 0"
-    class="bg-white rounded-xl shadow p-4 sm:p-6"
+    class="bg-white dark:bg-gray-600 rounded-xl shadow p-4 sm:p-6"
   >
-    <h3 class="text-lg font-semibold mb-4 text-gray-800">
+    <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
       Top Spending Categories
     </h3>
     <div class="space-y-4">
@@ -29,7 +30,7 @@ defineProps<{
               {{ index + 1 }}
             </span>
           </div>
-          <span class="font-medium text-gray-800 truncate">{{ category }}</span>
+          <span class="font-medium text-gray-800 dark:text-white truncate">{{ category }}</span>
         </div>
 
         <!-- Progress Bar and Stats -->
@@ -49,10 +50,10 @@ defineProps<{
             <span
               class="font-semibold text-red-600 text-sm sm:text-base w-16 sm:w-20 text-right"
             >
-              ${{ amount.toFixed(2) }}
+              {{ formatCurrency(amount.toFixed(2), currency) }}
             </span>
             <span
-              class="text-xs sm:text-sm text-gray-500 w-10 sm:w-12 text-right"
+              class="text-xs sm:text-sm text-gray-500 dark:text-gray-300 w-10 sm:w-12 text-right"
             >
               {{ ((amount / filteredExpense) * 100).toFixed(1) }}%
             </span>

@@ -2,12 +2,13 @@
 import { ref, computed } from "vue";
 import { useTransactions } from "~/composables/useTransactions";
 import { useCategories } from "~/composables/useCategories";
-import SummaryCard from "~/components/SummaryCard.vue";
+import { useSettings } from "~/composables/useSettings";
 import TransactionFilters from "~/components/TransactionFilters.vue";
 import { Download, FileText, Calendar } from "lucide-vue-next";
-import { formatCurrency } from "~/utils/utils";
+import { formatCurrency } from "~/utils/formatter";
 
 const { transactions } = useTransactions();
+const { userSettings } = useSettings();
 const { categories } = useCategories();
 // Filter state
 const showFilters = ref(false);
@@ -246,8 +247,8 @@ const exportPDF = async () => {
     <!-- Header -->
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">Financial Reports</h2>
-        <p class="text-gray-600 text-sm mt-1">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Financial Reports</h2>
+        <p class="text-gray-600 dark:text-gray-200 text-sm mt-1">
           Comprehensive breakdown of your finances
         </p>
       </div>
@@ -278,12 +279,12 @@ const exportPDF = async () => {
     />
 
     <!-- Results Info -->
-    <div class="text-sm text-gray-600">
+    <div class="text-sm text-gray-600 dark:text-white">
       Showing data for {{ filteredTransactions.length }} transactions
     </div>
 
     <!-- Monthly Report -->
-    <div class="bg-white rounded-xl shadow p-6">
+    <div class="bg-white dark:bg-gray-600 rounded-xl shadow p-6">
       <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
         <Calendar class="w-5 h-5 text-blue-600" />
         Monthly Breakdown
@@ -292,14 +293,14 @@ const exportPDF = async () => {
         <table class="w-full text-left">
           <thead>
             <tr class="border-b">
-              <th class="py-3 px-4 font-semibold text-gray-700">Month</th>
-              <th class="py-3 px-4 font-semibold text-gray-700 text-right">
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white">Month</th>
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white text-right">
                 Income
               </th>
-              <th class="py-3 px-4 font-semibold text-gray-700 text-right">
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white text-right">
                 Expense
               </th>
-              <th class="py-3 px-4 font-semibold text-gray-700 text-right">
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white text-right">
                 Net
               </th>
             </tr>
@@ -308,14 +309,14 @@ const exportPDF = async () => {
             <tr
               v-for="([month, data], index) in Object.entries(monthlyData)"
               :key="month"
-              :class="index % 2 === 0 ? 'bg-gray-50' : ''"
+              :class="index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-400' : ''"
             >
               <td class="py-3 px-4">{{ month }}</td>
               <td class="py-3 px-4 text-right text-green-600 font-semibold">
-                {{ formatCurrency(data.income) }}
+                {{ formatCurrency(data.income, userSettings.currency) }}
               </td>
               <td class="py-3 px-4 text-right text-red-600 font-semibold">
-                {{ formatCurrency(data.expense) }}
+                {{ formatCurrency(data.expense, userSettings.currency) }}
               </td>
               <td
                 class="py-3 px-4 text-right font-bold"
@@ -325,18 +326,18 @@ const exportPDF = async () => {
                     : 'text-red-600'
                 "
               >
-                {{ formatCurrency(data.income - data.expense) }}
+                {{ formatCurrency(data.income - data.expense, userSettings.currency) }}
               </td>
             </tr>
           </tbody>
           <tfoot class="border-t-2">
-            <tr class="bg-gray-100 font-bold">
+            <tr class="bg-gray-100 dark:bg-gray-800 font-bold">
               <td class="py-3 px-4">Total</td>
               <td class="py-3 px-4 text-right text-green-600">
-                {{ formatCurrency(filteredIncome) }}
+                {{ formatCurrency(filteredIncome, userSettings.currency) }}
               </td>
               <td class="py-3 px-4 text-right text-red-600">
-                {{ formatCurrency(filteredExpense) }}
+                {{ formatCurrency(filteredExpense, userSettings.currency) }}
               </td>
               <td
                 class="py-3 px-4 text-right"
@@ -344,7 +345,7 @@ const exportPDF = async () => {
                   filteredBalance >= 0 ? 'text-green-600' : 'text-red-600'
                 "
               >
-                {{ formatCurrency(filteredBalance) }}
+                {{ formatCurrency(filteredBalance, userSettings.currency) }}
               </td>
             </tr>
           </tfoot>
@@ -353,20 +354,20 @@ const exportPDF = async () => {
     </div>
 
     <!-- Category Report -->
-    <div class="bg-white rounded-xl shadow p-6">
+    <div class="bg-white dark:bg-gray-600 rounded-xl shadow p-6">
       <h3 class="text-lg font-semibold mb-4">Category Breakdown</h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left">
           <thead>
             <tr class="border-b">
-              <th class="py-3 px-4 font-semibold text-gray-700">Category</th>
-              <th class="py-3 px-4 font-semibold text-gray-700 text-right">
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white">Category</th>
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white text-right">
                 Income
               </th>
-              <th class="py-3 px-4 font-semibold text-gray-700 text-right">
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white text-right">
                 Expense
               </th>
-              <th class="py-3 px-4 font-semibold text-gray-700 text-right">
+              <th class="py-3 px-4 font-semibold text-gray-700 dark:text-white text-right">
                 Net
               </th>
             </tr>
@@ -375,14 +376,14 @@ const exportPDF = async () => {
             <tr
               v-for="([category, data], index) in Object.entries(categoryData)"
               :key="category"
-              :class="index % 2 === 0 ? 'bg-gray-50' : ''"
+              :class="index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-400' : ''"
             >
               <td class="py-3 px-4">{{ category }}</td>
               <td class="py-3 px-4 text-right text-green-600 font-semibold">
-                {{ formatCurrency(data.income) }}
+                {{ formatCurrency(data.income, userSettings.currency) }}
               </td>
               <td class="py-3 px-4 text-right text-red-600 font-semibold">
-                {{ formatCurrency(data.expense) }}
+                {{ formatCurrency(data.expense, userSettings.currency) }}
               </td>
               <td
                 class="py-3 px-4 text-right font-bold"
@@ -392,7 +393,7 @@ const exportPDF = async () => {
                     : 'text-red-600'
                 "
               >
-                {{ formatCurrency(data.income - data.expense) }}
+                {{ formatCurrency(data.income - data.expense, userSettings.currency) }}
               </td>
             </tr>
           </tbody>
@@ -406,7 +407,7 @@ const exportPDF = async () => {
       class="bg-white rounded-xl shadow p-12 text-center"
     >
       <FileText class="w-16 h-16 mx-auto text-gray-300 mb-4" />
-      <h3 class="text-xl font-semibold text-gray-700 mb-2">
+      <h3 class="text-xl font-semibold text-gray-700 dark:text-white mb-2">
         No data available
       </h3>
       <p class="text-gray-500">

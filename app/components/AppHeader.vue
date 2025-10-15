@@ -19,7 +19,7 @@ const closeDropdown = () => {
 
 const logout = async () => {
   closeDropdown();
-  if (confirm("Are you sure you want to logout?")) {
+  if (confirm("Are you sure want to logout?")) {
     await signout();
     router.push("/login");
   }
@@ -33,7 +33,7 @@ const goToSettings = () => {
 </script>
 
 <template>
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm mb-4">
+  <header class="bg-white sticky top-0 z-50 shadow-sm mb-4 dark:bg-gray-800 dark:text-gray-100">
     <div class="max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <!-- Logo and Brand -->
@@ -48,10 +48,10 @@ const goToSettings = () => {
             @error="(e) => (e.target.style.display = 'none')"
           />
           <div class="flex flex-col">
-            <h1 class="text-xl font-bold text-gray-900 leading-tight">
+            <h1 class="text-xl font-bold text-gray-900 leading-tight dark:text-white">
               MoneyTracker
             </h1>
-            <p class="text-xs text-gray-500 hidden sm:block">
+            <p class="text-xs text-gray-500 hidden sm:block dark:text-white">
               Track your finances
             </p>
           </div>
@@ -61,7 +61,7 @@ const goToSettings = () => {
         <div v-if="user" class="relative">
           <button
             @click="toggleDropdown"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors border border-gray-200"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors border border-gray-200"
           >
             <!-- User Avatar -->
             <div
@@ -71,13 +71,13 @@ const goToSettings = () => {
             </div>
             <!-- User Email (hidden on mobile) -->
             <span
-              class="hidden md:block font-medium text-gray-700 text-sm max-w-[150px] truncate"
+              class="hidden md:block font-medium text-gray-700 dark:text-white text-sm max-w-[150px] truncate"
             >
               {{ user?.displayName || user?.email }}
             </span>
             <!-- Dropdown Icon -->
             <ChevronDown
-              class="w-4 h-4 text-gray-500 transition-transform"
+              class="w-4 h-4 text-gray-500 dark:text-white transition-transform"
               :class="{ 'rotate-180': dropdownOpen }"
             />
           </button>
@@ -93,23 +93,23 @@ const goToSettings = () => {
           >
             <div
               v-if="dropdownOpen"
-              class="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden"
+              class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-600 border border-gray-200 rounded-lg shadow-lg overflow-hidden"
             >
               <!-- User Info -->
-              <div class="px-4 py-3 border-b border-gray-100 bg-gray-50">
-                <p class="text-sm font-medium text-gray-900 truncate">
+              <div class="px-4 py-3 border-b border-gray-100 dark:bg-gray-600 bg-gray-50">
+                <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
                   {{ user.email }}
                 </p>
-                <p class="text-xs text-gray-500 mt-1">Signed in</p>
+                <p class="text-xs text-gray-500 dark:text-white mt-1">Signed in</p>
               </div>
 
               <!-- Menu Items -->
               <div class="py-1">
                 <button
                   @click="goToSettings"
-                  class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-white dark:hover:bg-gray-400  hover:bg-gray-50 transition-colors"
                 >
-                  <Settings class="w-4 h-4 text-gray-500" />
+                  <Settings class="w-4 h-4 text-gray-500 dark:text-white" />
                   Settings
                 </button>
                 <button

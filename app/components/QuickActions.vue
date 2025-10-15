@@ -13,7 +13,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow p-6 mb-4">
+  <div class="bg-white dark:bg-gray-600 rounded-xl shadow p-6 mb-4">
     <!-- <h3 class="text-lg font-semibold mb-4 text-gray-800">Quick Actions</h3> -->
     <div
       class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"

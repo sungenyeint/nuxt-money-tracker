@@ -46,7 +46,7 @@ watch(() => props.transactions, renderChart, { deep: true })
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow p-4">
+  <div class="bg-white dark:bg-gray-600 rounded-xl shadow p-4">
     <h3 class="text-lg font-semibold mb-2">Category Breakdown</h3>
     <canvas ref="canvasRef" width="300" height="300"></canvas>
   </div>

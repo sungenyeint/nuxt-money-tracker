@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { formatCurrency } from '~/utils/utils'
-import { WalletCardsIcon, TrendingDown } from 'lucide-vue-next'
+import { formatCurrency, formatDate } from '~/utils/formatter'
+import { TrendingDown, TrendingUp } from 'lucide-vue-next'
 const props = defineProps<{
   recentTransactions: any[];
+  currency: string;
+  format: string;
 }>();
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow p-6">
+  <div class="bg-white dark:bg-gray-600 rounded-xl shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Recent Transactions</h3>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Recent Transactions</h3>
       <NuxtLink to="/transactions" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
         View All
       </NuxtLink>
@@ -18,17 +20,17 @@ const props = defineProps<{
       <div
         v-for="t in props.recentTransactions"
         :key="t.id"
-        class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+        class="flex bg-white dark:bg-gray-500 items-center justify-between p-3 border rounded-lg hover:bg-white transition-colors"
       >
         <div class="flex items-center gap-3">
           <div :class="t.type === 'income' ? 'text-green-500' : 'text-red-500'">
-            <WalletCardsIcon v-if="t.type === 'income'" class="w-5 h-5" />
+            <TrendingUp v-if="t.type === 'income'" class="w-5 h-5" />
             <TrendingDown v-else class="w-5 h-5" />
           </div>
           <div>
-            <p class="font-medium text-gray-800">{{ t.description }}</p>
-            <p class="text-sm text-gray-500">
-              {{ t.category }} • {{ new Date(t.date).toLocaleDateString() }}
+            <p class="font-medium text-gray-800 dark:text-white">{{ t.description }}</p>
+            <p class="text-sm text-gray-500 dark:text-white">
+              {{ t.category }} • {{ formatDate(t.date, format) }}
             </p>
           </div>
         </div>
@@ -36,7 +38,7 @@ const props = defineProps<{
           :class="t.type === 'income' ? 'text-green-600' : 'text-red-600'"
           class="font-semibold"
         >
-          {{ t.type === "income" ? "+" : "-" }}{{ formatCurrency(t.amount) }}
+          {{ t.type === "income" ? "+" : "-" }}{{ formatCurrency(t.amount, currency) }}
         </div>
       </div>
     </div>

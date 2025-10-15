@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import SummaryCard from "~/components/SummaryCard.vue";
 import Transactions from "~/components/Transactions.vue";
 import TransactionFilters from "~/components/TransactionFilters.vue";
 import { ref, computed } from "vue";
@@ -10,9 +9,11 @@ import {
 import { useCategories } from "~/composables/useCategories";
 import TransactionModal from "~/components/TransactionModal.vue";
 import EditTransactionModal from "~/components/EditTransactionModal.vue";
+import { useSettings } from "~/composables/useSettings";
 
+const { userSettings } = useSettings();
 const initialTransaction = {
-    type: "income" as "income" | "expense",
+    type: userSettings.value.defaultTransactionType as "income" | "expense",
     category: "",
     description: "",
     amount: 0,
@@ -147,7 +148,7 @@ const handleUpdateTransaction = async (transaction: Transaction) => {
 
 // Handle delete transaction
 const handleDeleteTransaction = async (transactionId: string) => {
-    if (confirm("Are you sure you want to delete this transaction?")) {
+    if (confirm("Are you sure want to delete this transaction?")) {
         try {
             await deleteTransaction(transactionId);
         } catch (e) {
@@ -169,7 +170,7 @@ const handleDeleteTransaction = async (transactionId: string) => {
             @clearFilters="clearFilters">
             <template #actions>
                 <button
-                    class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition-colors whitespace-nowrap"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
                     @click="showAddModal = true">
                     + Add Transaction
                 </button>
@@ -177,7 +178,7 @@ const handleDeleteTransaction = async (transactionId: string) => {
         </TransactionFilters>
 
         <!-- Results Count -->
-        <div class="flex items-center justify-between text-sm text-gray-600">
+        <div class="flex items-center justify-between text-sm text-gray-600 dark:text-white">
             <span>
                 Showing {{ filteredTransactions.length }} of {{ transactions.length }}
                 transactions
@@ -188,7 +189,7 @@ const handleDeleteTransaction = async (transactionId: string) => {
         </div>
 
         <!-- Transactions List -->
-        <Transactions :transactions="filteredTransactions" @edit="editTransaction" @delete="handleDeleteTransaction" />
+        <Transactions :transactions="filteredTransactions" @edit="editTransaction" @delete="handleDeleteTransaction" :currency="userSettings.currency" :format="userSettings.dateFormat" />
 
         <!-- Empty States -->
         <div v-if="filteredTransactions.length === 0 && transactions.length > 0"
