@@ -1,5 +1,5 @@
+import { useNuxtApp } from '#app'
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
-import { useFirebase } from "~/composables/useFirebase";
 import {
     collection,
     query,
@@ -11,9 +11,10 @@ import {
     deleteDoc,
     doc,
     serverTimestamp,
+    type Firestore,
 } from "firebase/firestore";
 import { useAuth } from "~/composables/useAuth";
-const { db } = useFirebase();
+
 // TypeScript Interfaces
 export interface Transaction {
     id: string;
@@ -35,10 +36,28 @@ export interface NewTransactionInput {
 }
 
 export function useTransactions() {
+    const nuxtApp = useNuxtApp()
+    const $db = nuxtApp.$db as Firestore | undefined
     const { user } = useAuth();
     const transactions = ref<Transaction[]>([]);
     const loading = ref(true);
     const error = ref<string | null>(null);
+
+    if (!$db) {
+        console.error('Firebase Firestore is not initialized. Make sure the Firebase plugin is properly configured.');
+        return {
+            transactions,
+            loading,
+            error,
+            income: computed(() => 0),
+            expense: computed(() => 0),
+            balance: computed(() => 0),
+            recentTransactions: computed(() => []),
+            addTransaction: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+            updateTransaction: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+            deleteTransaction: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+        };
+    }
 
     // Store unsubscribe function for cleanup
     let unsubscribe: (() => void) | null = null;
@@ -52,7 +71,7 @@ export function useTransactions() {
                 if (!val) return;
 
                 const q = query(
-                    collection(db, "transactions"),
+                    collection($db, "transactions"),
                     where("userId", "==", val.uid),
                     orderBy("createdAt", "desc")
                 );
@@ -115,7 +134,7 @@ export function useTransactions() {
                 throw new Error("Amount must be greater than 0");
             }
 
-            await addDoc(collection(db, "transactions"), {
+            await addDoc(collection($db, "transactions"), {
                 category: newTransaction.category,
                 description: newTransaction.description,
                 amount: newTransaction.amount,
@@ -147,7 +166,7 @@ export function useTransactions() {
                 throw new Error("Amount must be greater than 0");
             }
 
-            await updateDoc(doc(db, "transactions", transaction.id), {
+            await updateDoc(doc($db, "transactions", transaction.id), {
                 category: transaction.category,
                 description: transaction.description,
                 amount: transaction.amount,
@@ -167,7 +186,7 @@ export function useTransactions() {
 
             if (!user.value) throw new Error("Please login first");
 
-            await deleteDoc(doc(db, "transactions", transactionId));
+            await deleteDoc(doc($db, "transactions", transactionId));
         } catch (e: any) {
             error.value = e.message;
             throw e;

@@ -5,15 +5,18 @@ export default defineNuxtRouteMiddleware((to) => {
 
     console.log('Auth Middleware - Loading:', authLoading.value, 'User:', user.value)
 
-    // Allow access to public routes
-    const publicRoutes = ['/login', '/register', '/']
-    if (publicRoutes.includes(to.path)) return
+    const publicRoutes = ['/', '/login', '/register']
 
-    // Wait for auth to finish loading
-    if (authLoading.value) {
-        // Still loading, don't redirect yet
-        return
+    // Wait for auth to finish loading before deciding
+    if (authLoading.value) return
+
+    // If authenticated, prevent visiting auth pages
+    if (user.value && (to.path === '/login' || to.path === '/register')) {
+        return navigateTo('/')
     }
+
+    // Allow access to public routes
+    if (publicRoutes.includes(to.path)) return
 
     // If not authenticated after loading, redirect to login
     if (!user.value) {

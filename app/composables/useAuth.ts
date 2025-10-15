@@ -1,59 +1,72 @@
-import { ref } from "vue"
-import { useFirebase } from "~/composables/useFirebase"
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth"
-
-const user = ref<any>(null)
-const authLoading = ref(true)
-const { auth, googleProvider } = useFirebase()
-let initialized = false
-
-function initAuthListener() {
-    if (!initialized) {
-        onAuthStateChanged(auth, (u) => {
-            user.value = u
-            authLoading.value = false
-        })
-        initialized = true
-    }
-}
+import { useNuxtApp } from "#app";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  onAuthStateChanged,
+  type User,
+  type Auth,
+} from "firebase/auth";
 
 export function useAuth() {
-    initAuthListener()
+  const nuxtApp = useNuxtApp();
+  const user = useState<User | null>("user", () => null);
+  const authLoading = useState<boolean>("authLoading", () => true);
 
-    const signout = async () => {
-        await signOut(auth)
-        user.value = null
-    }
+  // Get Firebase auth instance with error handling
+  const $auth = nuxtApp.$auth as Auth | undefined;
 
-    const signin = async (email: string, password: string) => {
-        try {
-            const result = await signInWithEmailAndPassword(auth, email, password)
-            user.value = result.user
-            return result.user
-        } catch (error) {
-            throw error
-        }
-    }
+  if (!$auth) {
+    console.error('Firebase auth is not initialized. Make sure the Firebase plugin is properly configured.');
+    return {
+      user,
+      authLoading,
+      signUpWithEmail: () => Promise.reject(new Error('Firebase auth not initialized')),
+      signin: () => Promise.reject(new Error('Firebase auth not initialized')),
+      signInWithGoogle: () => Promise.reject(new Error('Firebase auth not initialized')),
+      signout: () => Promise.reject(new Error('Firebase auth not initialized')),
+    };
+  }
 
-    const signInWithGoogle = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider)
-            user.value = result.user
-            return result.user
-        } catch (error) {
-            throw error
-        }
-    }
+  // Initialize auth state listener
+  onAuthStateChanged($auth, (firebaseUser) => {
+    user.value = firebaseUser;
+    authLoading.value = false;
+  });
 
-    const signUpWithEmail = async (email: string, password: string) => {
-        try {
-            const result = await createUserWithEmailAndPassword(auth, email, password)
-            user.value = result.user
-            return result.user
-        } catch (error) {
-            throw error
-        }
-    }
+  // Register new user
+  const signUpWithEmail = async (email: string, password: string) => {
+    const res = await createUserWithEmailAndPassword($auth, email, password);
+    user.value = res.user;
+  };
 
-    return { user, authLoading, signout, signin, signUpWithEmail, signInWithGoogle }
+  // Login user
+  const signin = async (email: string, password: string) => {
+    const res = await signInWithEmailAndPassword($auth, email, password);
+    user.value = res.user;
+  };
+
+  // Login with Google
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const res = await signInWithPopup($auth, provider);
+    user.value = res.user;
+  };
+
+  // Logout
+  const signout = async () => {
+    await signOut($auth);
+    user.value = null;
+  };
+
+  return {
+    user,
+    authLoading,
+    signUpWithEmail,
+    signin,
+    signInWithGoogle,
+    signout
+  };
 }

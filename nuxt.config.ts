@@ -1,5 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false, // disable SSR
+  nitro: {
+    preset: 'vercel-static'
+  },
   components: true,
   devtools: { enabled: false },
   modules: ["@nuxtjs/tailwindcss"],

@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted, watch } from "vue";
-import { useFirebase } from "~/composables/useFirebase";
+import { useNuxtApp } from "#app";
 import {
     collection,
     query,
@@ -9,10 +9,10 @@ import {
     deleteDoc,
     doc,
     serverTimestamp,
+    type Firestore,
+    orderBy,
 } from "firebase/firestore";
 import { useAuth } from "~/composables/useAuth";
-
-const { db } = useFirebase();
 // TypeScript Interfaces
 export interface Category {
     id: string;
@@ -30,10 +30,24 @@ export interface NewCategoryInput {
 }
 
 export function useCategories() {
+    const nuxtApp = useNuxtApp();
+    const $db = nuxtApp.$db as Firestore | undefined;
     const { user } = useAuth();
     const categories = ref<Category[]>([]);
     const loading = ref(true);
     const error = ref<string | null>(null);
+
+    if (!$db) {
+        console.error('Firebase Firestore is not initialized. Make sure the Firebase plugin is properly configured.');
+        return {
+            categories,
+            loading,
+            error,
+            addCategory: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+            updateCategory: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+            deleteCategory: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+        };
+    }
 
     // Store unsubscribe function for cleanup
     let unsubscribe: (() => void) | null = null;
@@ -48,8 +62,8 @@ export function useCategories() {
                 if (!val) return;
 
                 const q = query(
-                    collection(db, "categories"),
-                    //   where("userId", "==", val.uid)
+                    collection($db, "categories"),
+                    orderBy("createdAt", "desc")
                 );
 
                 // Store unsubscribe function
@@ -96,7 +110,7 @@ export function useCategories() {
                 throw new Error("Category with this name already exists");
             }
 
-            await addDoc(collection(db, "categories"), {
+            await addDoc(collection($db, "categories"), {
                 name: newCategory.name,
                 type: newCategory.type,
                 color: newCategory.color || "#3b82f6",
@@ -130,7 +144,7 @@ export function useCategories() {
                 throw new Error("Category with this name already exists");
             }
 
-            await updateDoc(doc(db, "categories", category.id), {
+            await updateDoc(doc($db, "categories", category.id), {
                 name: category.name,
                 type: category.type,
                 color: category.color,
@@ -148,7 +162,7 @@ export function useCategories() {
 
             if (!user.value) throw new Error("Please login first");
 
-            await deleteDoc(doc(db, "categories", categoryId));
+            await deleteDoc(doc($db, "categories", categoryId));
         } catch (e: any) {
             error.value = e.message;
             throw e;

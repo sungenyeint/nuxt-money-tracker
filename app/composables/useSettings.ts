@@ -1,9 +1,7 @@
 import { ref, watch, onMounted } from "vue";
-import { useFirebase } from "~/composables/useFirebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useNuxtApp } from "#app";
+import { doc, getDoc, setDoc, type Firestore } from "firebase/firestore";
 import { useAuth } from "~/composables/useAuth";
-
-const { db } = useFirebase();
 
 export interface UserSettings {
     currency: string;
@@ -33,7 +31,21 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 
 export function useSettings() {
+    const nuxtApp = useNuxtApp();
+    const $db = nuxtApp.$db as Firestore | undefined;
     const { user } = useAuth();
+
+    if (!$db) {
+        console.error('Firebase Firestore is not initialized. Make sure the Firebase plugin is properly configured.');
+        return {
+            userSettings,
+            loading,
+            error,
+            loadUserSettings: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+            saveSettings: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+            resetSettings: () => Promise.reject(new Error('Firebase Firestore not initialized')),
+        };
+    }
 
     // Load settings when user is available
     onMounted(() => {
@@ -54,7 +66,7 @@ export function useSettings() {
             if (!user.value) return;
 
             error.value = null;
-            const settingsDoc = await getDoc(doc(db, "userSettings", user.value.uid));
+            const settingsDoc = await getDoc(doc($db, "userSettings", user.value.uid));
 
             if (settingsDoc.exists()) {
                 userSettings.value = settingsDoc.data() as UserSettings;
@@ -69,7 +81,7 @@ export function useSettings() {
         try {
             if (!user.value) throw new Error("Please login first");
 
-            await setDoc(doc(db, "userSettings", user.value.uid), {
+            await setDoc(doc($db, "userSettings", user.value.uid), {
                 ...settings,
                 updatedAt: new Date().toISOString(),
             });
@@ -85,7 +97,7 @@ export function useSettings() {
         try {
             if (!user.value) throw new Error("Please login first");
 
-            await setDoc(doc(db, "userSettings", user.value.uid), {
+            await setDoc(doc($db, "userSettings", user.value.uid), {
                 ...defaultSettings,
                 updatedAt: new Date().toISOString(),
             });
