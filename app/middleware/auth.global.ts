@@ -1,26 +1,33 @@
 import { useAuth } from '~/composables/useAuth'
+import { watch } from 'vue'
 
-export default defineNuxtRouteMiddleware((to) => {
-    const { user, authLoading } = useAuth()
+export default defineNuxtRouteMiddleware(async (to) => {
+	const { user, authLoading } = useAuth()
 
-    console.log('Auth Middleware - Loading:', authLoading.value, 'User:', user.value)
+	const publicRoutes = ['/login', '/register']
 
-    const publicRoutes = ['/', '/login', '/register']
+	// Wait for auth to finish loading before deciding
+	if (authLoading.value) {
+		await new Promise<void>((resolve) => {
+			const stop = watch(authLoading, (isLoading) => {
+				if (!isLoading) {
+					stop()
+					resolve()
+				}
+			})
+		})
+	}
 
-    // Wait for auth to finish loading before deciding
-    if (authLoading.value) return
+	// If authenticated, prevent visiting auth pages
+	if (user.value && (to.path === '/login' || to.path === '/register')) {
+		return navigateTo('/')
+	}
 
-    // If authenticated, prevent visiting auth pages
-    if (user.value && (to.path === '/login' || to.path === '/register')) {
-        return navigateTo('/')
-    }
+	// Allow access to public routes
+	if (publicRoutes.includes(to.path)) return
 
-    // Allow access to public routes
-    if (publicRoutes.includes(to.path)) return
-
-    // If not authenticated after loading, redirect to login
-    if (!user.value) {
-        console.log('Auth Middleware - Redirecting to login')
-        return navigateTo('/login')
-    }
+	// If not authenticated after loading, redirect to login
+	if (!user.value) {
+		return navigateTo('/login')
+	}
 })
