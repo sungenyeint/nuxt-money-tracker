@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CircleXIcon } from "lucide-vue-next";
 import { ref, watch } from "vue";
 const props = defineProps<{
     show: boolean;
@@ -21,8 +22,8 @@ const onUpdate = () => {
 <template>
     <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
         <div class="bg-white dark:bg-gray-600 rounded-xl shadow-lg p-6 w-full max-w-md relative">
-            <button @click="$emit('close')" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
-                &times;
+            <button @click="$emit('close')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <CircleXIcon />
             </button>
             <h2 class="text-xl font-bold mb-6 text-center">Edit Category</h2>
             <form @submit.prevent="onUpdate" class="space-y-4">

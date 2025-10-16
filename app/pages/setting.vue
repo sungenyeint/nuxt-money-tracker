@@ -196,7 +196,7 @@ const resetToDefaults = async () => {
                     <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                         Theme
                     </label>
-                    <div class="grid grid-cols-3 gap-3">
+                    <div class="grid grid-cols-2 gap-2">
                         <button v-for="theme in THEMES" :key="theme.value" @click="localSettings.theme = theme.value"
                             :class="[
                                 'px-4 py-3 rounded-lg border-2 font-medium transition-all',

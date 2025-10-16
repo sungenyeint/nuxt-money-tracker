@@ -74,7 +74,7 @@ const handleDeleteCategory = async (categoryId: string) => {
             </button>
         </div>
 
-        <!-- Categories Grid: Income left, Expense right on desktop; Expense first on mobile -->
+        <!-- Categories Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="order-1 space-y-3">
                 <div v-for="category in incomeCategories" :key="category.id"

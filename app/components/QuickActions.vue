@@ -2,9 +2,9 @@
 import {
   BarChart3,
   FileText,
-  Target,
-  ShoppingCart,
   LucideLayoutDashboard,
+  Repeat,
+  Utensils,
 } from "lucide-vue-next";
 import { useRoute } from "#imports";
 
@@ -36,7 +36,7 @@ const route = useRoute();
         class="flex flex-col items-center p-4 ring-2 ring-blue-300 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
         :class="{ 'ring-4 bg-blue-100 ring-blue-500': route.path === '/transactions' }"
       >
-        <ShoppingCart class="w-6 h-6 text-blue-600 mb-2" />
+        <Repeat class="w-6 h-6 text-blue-600 mb-2" />
         <span class="text-xs sm:text-sm font-medium text-blue-700 text-center"
           >Transactions</span
         >
@@ -48,7 +48,7 @@ const route = useRoute();
         class="flex flex-col items-center p-4 ring-2 ring-orange-300 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors cursor-pointer"
         :class="{ 'ring-4 bg-orange-100 ring-orange-500': route.path === '/categories' }"
       >
-        <Target class="w-6 h-6 text-orange-600 mb-2" />
+        <Utensils class="w-6 h-6 text-orange-600 mb-2" />
         <span class="text-xs sm:text-sm font-medium text-orange-700 text-center"
           >Categories</span
         >

@@ -19,5 +19,5 @@ export const DATEFORMATS = [
 export const THEMES = [
     { value: "light", label: "Light" },
     { value: "dark", label: "Dark" },
-    { value: "auto", label: "Auto (System)" },
+    // { value: "auto", label: "Auto (System)" },
 ];

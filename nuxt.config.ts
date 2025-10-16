@@ -4,14 +4,12 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'vercel-static'
   },
-  components: true,
+  css: [
+    '~/assets/css/style.css'
+  ],
   devtools: { enabled: false },
   modules: ["@nuxtjs/tailwindcss"],
   runtimeConfig: {
-    // Private variables (not exposed to browser)
-    privateKey: process.env.NUXT_FIREBASE_PRIVATE_KEY,
-
-    // Public variables (accessible on client)
     public: {
       firebase: {
         apiKey: process.env.NUXT_FIREBASE_API_KEY,
