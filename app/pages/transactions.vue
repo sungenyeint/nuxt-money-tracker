@@ -170,7 +170,7 @@ const handleDeleteTransaction = async (transactionId: string) => {
             @clearFilters="clearFilters">
             <template #actions>
                 <button
-                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                    class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
                     @click="showAddModal = true">
                     + Add Transaction
                 </button>

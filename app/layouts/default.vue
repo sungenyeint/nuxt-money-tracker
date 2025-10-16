@@ -18,11 +18,14 @@ const currency = computed(() => userSettings.value.currency);
 
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-700 dark:text-gray-100 text-gray-800">
-        <div class="max-w-6xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-6">
             <AppHeader />
-            <QuickActions />
-            <DashboardCards :balance="balance" :income="income" :expense="expense" :currency="currency" class="mb-4" />
-            <slot />
+            <div class="max-w-6xl mx-auto">
+                <DashboardCards :balance="balance" :income="income" :expense="expense" :currency="currency"
+                    class="mb-4" />
+                <QuickActions />
+                <slot />
+            </div>
             <AppFooter />
         </div>
     </div>

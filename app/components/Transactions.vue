@@ -38,7 +38,8 @@ const total = computed(() => {
 
 <template>
     <div class="space-y-4">
-        <div class="text-right text-xl font-bold divr-8 text-white rounded-xl p-4" :class="total > 0 ? 'bg-green-500' : 'bg-red-500'">Total :
+        <div class="text-right text-xl font-bold divr-8 text-white rounded-xl p-4"
+            :class="total > 0 ? 'bg-green-500' : 'bg-red-500'">Total :
             <span class="pr-8">{{ formatCurrency(total, currency) }}</span>
         </div>
         <div v-for="t in transactions" :key="t.id"
@@ -50,13 +51,13 @@ const total = computed(() => {
                 <TrendingDown class="w-6 h-6" />
             </div>
             <div class="flex-1">
-                <div class="text-black dark:text-white text-md">{{ t.description }}</div>
+                <div class="text-black dark:text-white text-md mb-2 sm:mb-0">{{ t.description }}</div>
                 <div class="text-gray-700">
                     <span class="rounded px-4 py-1 font-semibold text-xs"
                         :class="t.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
                         {{ t.category }}
                     </span>
-                    <span class="text-gray-400 mx-3">{{ formatDate(t.date, format) }}</span>
+                    <span class="text-gray-400 mx-0 sm:mx-3 block sm:inline mt-2 sm:mt-0">{{ formatDate(t.date, format) }}</span>
                 </div>
             </div>
             <div class="flex items-center gap-3">

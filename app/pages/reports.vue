@@ -252,24 +252,25 @@ const exportPDF = async () => {
           Comprehensive breakdown of your finances
         </p>
       </div>
-      <div class="flex gap-3">
-        <button
-          @click="exportCSV"
-          class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-        >
-          <Download class="w-4 h-4" />
-          Export CSV
-        </button>
-        <button
-          @click="exportPDF"
-          class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-        >
-          <FileText class="w-4 h-4" />
-          Export PDF
-        </button>
-      </div>
+
     </div>
 
+    <div class="flex gap-3">
+      <button
+        @click="exportCSV"
+        class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+      >
+        <Download class="w-4 h-4" />
+        Export CSV
+      </button>
+      <button
+        @click="exportPDF"
+        class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+      >
+        <FileText class="w-4 h-4" />
+        Export PDF
+      </button>
+    </div>
     <!-- Filters -->
     <TransactionFilters
       v-model:filters="filters"

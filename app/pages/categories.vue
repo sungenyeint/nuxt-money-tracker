@@ -72,7 +72,7 @@ const handleDeleteCategory = async (categoryId: string) => {
         </div>
 
         <!-- Categories Grid -->
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div v-for="category in categories" :key="category.id"
                 class="bg-white dark:bg-gray-600 rounded-xl shadow p-4 border hover:shadow-md transition-shadow">
                 <div class="flex items-center justify-between mb-3">
