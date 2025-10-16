@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import { useAuth } from "~/composables/useAuth";
-import { useSettings, type UserSettings } from "~/composables/useSettings";
+import { useSettings } from "~/composables/useSettings";
 import { CURRENCIES, DATEFORMATS, THEMES } from "~/constants/app";
 import {
     User,
@@ -12,6 +12,7 @@ import {
     Save,
     Shield,
 } from "lucide-vue-next";
+import type { UserSettings } from "~/types/models";
 
 const { user } = useAuth();
 const { userSettings, saveSettings, resetSettings } = useSettings();

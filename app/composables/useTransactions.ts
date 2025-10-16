@@ -14,26 +14,9 @@ import {
     type Firestore,
 } from "firebase/firestore";
 import { useAuth } from "~/composables/useAuth";
+import type { Transaction, NewTransactionInput } from "~/types/models";
 
-// TypeScript Interfaces
-export interface Transaction {
-    id: string;
-    userId: string;
-    type: "income" | "expense";
-    category: string;
-    description: string;
-    amount: number;
-    date: string;
-    createdAt: any;
-}
-
-export interface NewTransactionInput {
-    category: string;
-    description: string;
-    amount: number;
-    type: "income" | "expense";
-    date: string;
-}
+// Types moved to ~/types/models
 
 export function useTransactions() {
     const nuxtApp = useNuxtApp()

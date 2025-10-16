@@ -11,23 +11,11 @@ import {
     serverTimestamp,
     type Firestore,
     orderBy,
+    where,
+    or,
 } from "firebase/firestore";
 import { useAuth } from "~/composables/useAuth";
-// TypeScript Interfaces
-export interface Category {
-    id: string;
-    userId: string;
-    name: string;
-    type: "income" | "expense";
-    color: string;
-    createdAt: any;
-}
-
-export interface NewCategoryInput {
-    name: string;
-    type: "income" | "expense";
-    color: string;
-}
+import type { Category, NewCategoryInput } from "~/types/models";
 
 export function useCategories() {
     const nuxtApp = useNuxtApp();
@@ -63,6 +51,10 @@ export function useCategories() {
 
                 const q = query(
                     collection($db, "categories"),
+                    or(
+                        where("default", "==", true),
+                        where("userId", "==", val.uid)
+                    ),
                     orderBy("createdAt", "desc")
                 );
 
@@ -113,6 +105,7 @@ export function useCategories() {
             await addDoc(collection($db, "categories"), {
                 name: newCategory.name,
                 type: newCategory.type,
+                default: false,
                 color: newCategory.color || "#3b82f6",
                 userId: user.value.uid,
                 createdAt: serverTimestamp(),

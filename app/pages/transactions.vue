@@ -4,13 +4,13 @@ import TransactionFilters from "~/components/TransactionFilters.vue";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "#app";
 import {
-    useTransactions,
-    type Transaction,
+    useTransactions
 } from "~/composables/useTransactions";
 import { useCategories } from "~/composables/useCategories";
 import TransactionModal from "~/components/TransactionModal.vue";
 import EditTransactionModal from "~/components/EditTransactionModal.vue";
 import { useSettings } from "~/composables/useSettings";
+import type { Transaction } from "~/types/models";
 
 const { userSettings } = useSettings();
 const initialTransaction = {

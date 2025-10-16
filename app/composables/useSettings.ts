@@ -2,17 +2,7 @@ import { ref, watch, onMounted } from "vue";
 import { useNuxtApp } from "#app";
 import { doc, getDoc, setDoc, type Firestore } from "firebase/firestore";
 import { useAuth } from "~/composables/useAuth";
-
-export interface UserSettings {
-    currency: string;
-    dateFormat: string;
-    theme: string;
-    notifications: boolean;
-    autoBackup: boolean;
-    defaultTransactionType: "income" | "expense";
-    monthlyBudget: number;
-    weeklyBudget: number;
-}
+import type { UserSettings } from "~/types/models";
 
 const defaultSettings: UserSettings = {
     currency: "USD",
