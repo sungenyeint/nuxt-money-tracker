@@ -38,7 +38,7 @@ const total = computed(() => {
 
 <template>
     <div class="space-y-4">
-        <div class="text-right text-xl font-bold divr-8 text-white rounded-xl p-4"
+        <div v-if="transactions.length > 0" class="text-right text-xl font-bold divr-8 text-white rounded-xl p-4"
             :class="total > 0 ? 'bg-green-500' : 'bg-red-500'">Total :
             <span class="pr-8">{{ formatCurrency(total, currency) }}</span>
         </div>

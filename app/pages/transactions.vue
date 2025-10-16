@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import Transactions from "~/components/Transactions.vue";
 import TransactionFilters from "~/components/TransactionFilters.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useRoute } from "#app";
 import {
     useTransactions,
     type Transaction,
@@ -48,6 +49,13 @@ const {
 
 // Get categories
 const { categories } = useCategories();
+// Open add modal if URL query has add=1
+const route = useRoute();
+onMounted(() => {
+    if (route.query.add === '1') {
+        showAddModal.value = true;
+    }
+});
 
 // Combined filter logic
 const filteredTransactions = computed(() => {

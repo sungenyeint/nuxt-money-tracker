@@ -31,34 +31,65 @@ export function useAuth() {
   }
 
   // Initialize auth state listener
-  onAuthStateChanged($auth, (firebaseUser) => {
-    user.value = firebaseUser;
-    authLoading.value = false;
-  });
+  onAuthStateChanged(
+    $auth,
+    (firebaseUser) => {
+      user.value = firebaseUser;
+      authLoading.value = false;
+    },
+    (err) => {
+      console.error('Auth state change error:', err);
+      user.value = null;
+      authLoading.value = false;
+    }
+  );
 
   // Register new user
   const signUpWithEmail = async (email: string, password: string) => {
-    const res = await createUserWithEmailAndPassword($auth, email, password);
-    user.value = res.user;
+    try {
+      const res = await createUserWithEmailAndPassword($auth, email, password);
+      user.value = res.user;
+      return res.user;
+    } catch (err) {
+      console.error('signUpWithEmail error:', err);
+      throw err;
+    }
   };
 
   // Login user
   const signin = async (email: string, password: string) => {
-    const res = await signInWithEmailAndPassword($auth, email, password);
-    user.value = res.user;
+    try {
+      const res = await signInWithEmailAndPassword($auth, email, password);
+      user.value = res.user;
+      return res.user;
+    } catch (err) {
+      console.error('signin error:', err);
+      throw err;
+    }
   };
 
   // Login with Google
   const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    const res = await signInWithPopup($auth, provider);
-    user.value = res.user;
+    try {
+      const provider = new GoogleAuthProvider();
+      const res = await signInWithPopup($auth, provider);
+      user.value = res.user;
+      return res.user;
+    } catch (err) {
+      console.error('signInWithGoogle error:', err);
+      throw err;
+    }
   };
 
   // Logout
   const signout = async () => {
-    await signOut($auth);
-    user.value = null;
+    try {
+      await signOut($auth);
+      user.value = null;
+    } catch (err) {
+      console.error('signout error:', err);
+      throw err;
+    }
   };
 
   return {
